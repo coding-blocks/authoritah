@@ -1,4 +1,6 @@
-const R = require('ramda')
+const R = require('ramda'),
+  U = require('./util')
+;
 
 let rules = [ ]
 
@@ -10,27 +12,12 @@ const addRule = (rule) => {
 const respect = (request) => {
   if (R.isNil(request)) return false;
 
-  // TODO: Handle exceptions in both predicate and tests
   const matchingRules = R.filter(
-    (rule) => {
-      try {
-        return rule.predicate(request)
-      }
-      catch (error) {
-        return false
-      }
-    }
+    (rule) => U.falseIfError(rule.predicate, request)
   )
 
   const tests = R.map(
-    (test) => (request) => {
-      try {
-        return test(request)
-      }
-      catch (error) {
-        return false
-      }
-    },
+    (test) => U.falseIfError(test),
     R.pluck('test', matchingRules(rules))
   )
 
