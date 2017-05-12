@@ -8,23 +8,23 @@ const should = C.should(),
   TIMEOUT = 1000,
   alwaysTrue = R.always(true),
   alwaysFalse = R.always(false),
-  noop = R.always(undefined)
-;
+  noop = R.always(undefined),
 
-const ruleWithFalsePredicate = () => ({
-  predicate: alwaysFalse,
-  test: noop
-})
+  ruleWithFalsePredicate = () => ({
+    predicate: alwaysFalse,
+    test: noop
+  }),
 
-const truthyRule = (Authoritah) => ({
+  truthyRule = (Authoritah) => ({
     predicate: alwaysTrue,
     test: alwaysTrue
-})
+  }),
 
-const falsyRule = (Authoritah) => ({
+  falsyRule = (Authoritah) => ({
     predicate: alwaysTrue,
     test: alwaysFalse
-})
+  })
+;
 
 describe ('it respects your authoritah', () => {
   beforeEach(() => A.clearRules())
