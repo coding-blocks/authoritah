@@ -5,13 +5,13 @@ const R = require('ramda'),
 let rules = [ ]
 
 const addRule = (rule) => {
-  if (U.assertRuleStructure(rule)) {
+  let isRuleValid = U.assertRuleStructure(rule)
+
+  if (isRuleValid) {
     rules.push(rule)
-    return true;
   }
-  else {
-    return false;
-  }
+
+  return isRuleValid
 }
 
 const respect = (request) => {
