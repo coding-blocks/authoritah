@@ -13,12 +13,12 @@ const should = C.should(),
     test: noop
   }),
 
-  truthyRule = (Authoritah) => ({
+  truthyRule = () => ({
     predicate: R.T,
     test: R.T
   }),
 
-  falsyRule = (Authoritah) => ({
+  falsyRule = () => ({
     predicate: R.T,
     test: R.F
   })
