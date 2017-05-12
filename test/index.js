@@ -91,5 +91,15 @@ describe ('it respects your authoritah', () => {
       A.respect({ }).should.equal(true)
       done()
     })
+
+    it('it should be false when a test throws an error', (done) => {
+      A.addRule({
+        predicate: alwaysTrue,
+        test: (request) => { throw "Wat" }
+      })
+
+      A.respect({ }).should.equal(false)
+      done()
+    })
   })
 })

@@ -22,7 +22,17 @@ const respect = (request) => {
     }
   )
 
-  const tests = R.pluck('test', matchingRules(rules))
+  const tests = R.map(
+    (test) => (request) => {
+      try {
+        return test(request)
+      }
+      catch (error) {
+        return false
+      }
+    },
+    R.pluck('test', matchingRules(rules))
+  )
 
   const allTestsPass = R.allPass(tests)
 
