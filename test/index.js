@@ -27,6 +27,8 @@ const falsyRule = (Authoritah) => ({
 })
 
 describe ('it respects your authoritah', () => {
+  beforeEach(() => A.clearRules())
+
   it('should return true if there are no rules', (done) => {
     A.respect({ }).should.equal(true)
     done()
@@ -49,6 +51,7 @@ describe ('it respects your authoritah', () => {
   describe ('when a non-zero number of predicates match', () => {
 
     beforeEach(() => {
+      A.clearRules()
       A.addRule(ruleWithFalsePredicate())
       R.map(
         A.addRule,
@@ -69,5 +72,24 @@ describe ('it respects your authoritah', () => {
       done()
     }).timeout(TIMEOUT)
 
+  })
+
+  describe ('error handling', () => {
+    beforeEach(() => {
+      R.map(
+        A.addRule,
+        R.times(truthyRule, 5)
+      )
+    })
+
+    it('should not test rules where the predicate throws an error', (done) => {
+      A.addRule({
+        predicate: (request) => { throw "Wat" },
+        test: alwaysFalse
+      })
+
+      A.respect({ }).should.equal(true)
+      done()
+    })
   })
 })

@@ -12,14 +12,25 @@ const respect = (request) => {
 
   // TODO: Handle exceptions in both predicate and tests
   const matchingRules = R.filter(
-    (rule) => rule.predicate(request)
+    (rule) => {
+      try {
+        return rule.predicate(request)
+      }
+      catch (error) {
+        return false
+      }
+    }
   )
 
   const tests = R.pluck('test', matchingRules(rules))
+
   const allTestsPass = R.allPass(tests)
 
   return allTestsPass(request)
 }
 
+const clearRules = () => rules = [ ]
+
+module.exports.clearRules = clearRules;
 module.exports.addRule = addRule
 module.exports.respect = respect
