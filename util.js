@@ -16,10 +16,13 @@ const nIfError = R.curry(
 
 const falseIfError = nIfError(false)
 
+const hasPredicate = R.has('predicate')
+const hasTest = R.has('test')
+
 const assertRuleStructure = (rule) => {
   return (
-    isNotNil(rule.predicate) &&
-    isNotNil(rule.test)
+    hasPredicate(rule) &&
+    hasTest(rule)
   )
 }
 

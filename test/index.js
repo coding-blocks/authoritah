@@ -6,23 +6,21 @@ const M = require('mocha'),
 
 const should = C.should(),
   TIMEOUT = 1000,
-  alwaysTrue = R.always(true),
-  alwaysFalse = R.always(false),
   noop = R.always(undefined),
 
   ruleWithFalsePredicate = () => ({
-    predicate: alwaysFalse,
+    predicate: R.F,
     test: noop
   }),
 
   truthyRule = (Authoritah) => ({
-    predicate: alwaysTrue,
-    test: alwaysTrue
+    predicate: R.T,
+    test: R.T
   }),
 
   falsyRule = (Authoritah) => ({
-    predicate: alwaysTrue,
-    test: alwaysFalse
+    predicate: R.T,
+    test: R.F
   })
 ;
 
@@ -106,7 +104,7 @@ describe ('it respects your authoritah', () => {
     it('should not test rules where the predicate throws an error', (done) => {
       A.addRule({
         predicate: (request) => { throw "Wat" },
-        test: alwaysFalse
+        test: R.F
       })
 
       A.respect({ }).should.equal(true)
@@ -115,7 +113,7 @@ describe ('it respects your authoritah', () => {
 
     it('it should be false when a test throws an error', (done) => {
       A.addRule({
-        predicate: alwaysTrue,
+        predicate: R.T,
         test: (request) => { throw "Wat" }
       })
 
