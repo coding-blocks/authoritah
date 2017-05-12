@@ -29,6 +29,27 @@ const falsyRule = (Authoritah) => ({
 describe ('it respects your authoritah', () => {
   beforeEach(() => A.clearRules())
 
+  describe('rule adding', () => {
+    it('should add a valid rule', (done) => {
+      A.addRule(ruleWithFalsePredicate())
+      A.addRule(truthyRule())
+      A.addRule(falsyRule())
+
+      A.ruleCount().should.equal(3)
+
+      done()
+    }).timeout(TIMEOUT)
+
+    it('should not add an invalid rule', (done) => {
+      A.addRule({ test: noop })
+      A.addRule({ predicate: noop })
+
+      A.ruleCount().should.equal(0)
+
+      done()
+    }).timeout(TIMEOUT)
+  })
+
   it('should return true if there are no rules', (done) => {
     A.respect({ }).should.equal(true)
     done()

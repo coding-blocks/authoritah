@@ -5,8 +5,13 @@ const R = require('ramda'),
 let rules = [ ]
 
 const addRule = (rule) => {
-  // TODO: Assert Rule Structure
-  rules.push(rule)
+  if (U.assertRuleStructure(rule)) {
+    rules.push(rule)
+    return true;
+  }
+  else {
+    return false;
+  }
 }
 
 const respect = (request) => {
@@ -28,6 +33,11 @@ const respect = (request) => {
 
 const clearRules = () => rules = [ ]
 
-module.exports.clearRules = clearRules;
+const ruleCount = () => {
+  return R.length(rules)
+}
+
+module.exports.clearRules = clearRules
 module.exports.addRule = addRule
 module.exports.respect = respect
+module.exports.ruleCount = ruleCount
