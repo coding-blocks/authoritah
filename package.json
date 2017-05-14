@@ -1,6 +1,6 @@
 {
   "name": "cb-authoritah",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "An unopinionated, tiny-ass authorization module for node apps.",
   "main": "index.js",
   "scripts": {
