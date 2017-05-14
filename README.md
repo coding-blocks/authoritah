@@ -30,7 +30,9 @@ A sample rule used internally at Coding Blocks looks like this:
 ```javascript
 const onlyAdminsCanDeleteRecords = {
   predicate: (request) => isDeleteRequest(request),
-  test: (request) => currentUserIsAdmin()
+  test: (request) => currentUserIsAdmin(),
+  httpErrorCode: 401,
+  errorCode: 006
 })
 ```
 
@@ -79,13 +81,10 @@ let notManBearPig = {
   species: "NotManBearPig"
 }
 
-// Create a Rule for only creatures whose species is "ManBearPig", asserting
-// that all such creatures should be half man, half bear, and half pig.
-//
-// - You can add as many rules as you like.
-// - A rule will not be added if it lacks the required properties, ie, either a
-//   predicate, a test, or both.
-
+// Create a Rule for only creatures whose species is "ManBearPig", asserting //
+that all such creatures should be half man, half bear, and half pig.  // // -
+You can add as many rules as you like.  // - A rule will not be added if it
+lacks the required properties, ie, either a //   predicate, a test, or both.
 A.addRule({
 
   // This function is used to decide whether or not to test an object against
@@ -105,7 +104,11 @@ A.addRule({
       (creature.bearFraction === 0.5) &&
       (creature.pigFraction === 0.5)
     )
-  }
+  },
+
+  // You can attach extra payload to your objects, with things like error codes
+  // and messages, etc. Just be sure to quack like a duck.
+  errorMessage: "That's no ManBearPig!"
 })
 
 // Test various objects against the registered rules. This only returns true if
@@ -113,6 +116,18 @@ A.addRule({
 A.respect(manBearPig) // => true
 A.respect(fakeManBearPig) // => false
 A.respect(notManBearPig) // => true, because the rule is only for ManBearPigs
+
+// A much more useful method is disrespectedRules(), which returns a list of all
+// rules that were violated. Sorry about the naming, but the south park
+// references are more important than code comprehension.
+A.disrespectedRules(manBearPig) // => []
+A.disrespectedRules(fakeManBearPig) // => [ { predicate: [Function: predicate], test: [Function: test] } ]
+
+A
+  .disrespectedRules(fakeManBearPig)[0]
+  .errorMessage // => "That's no ManBearPig!"
+
+A.disrespectedRules(notManBearPig) // => []
 
 // Get the number of registered rules.
 A.ruleCount() // => 1
