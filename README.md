@@ -61,7 +61,7 @@ To clear all existing rules (useful for switching contexts), use
 ## Example
 
 ```javascript
-const A = require('cb-authoritah') ;
+const Authoritah = require('cb-authoritah') ;
 
 let manBearPig = {
   species: "ManBearPig",
@@ -81,10 +81,16 @@ let notManBearPig = {
   species: "NotManBearPig"
 }
 
-// Create a Rule for only creatures whose species is "ManBearPig", asserting //
-that all such creatures should be half man, half bear, and half pig.  // // -
-You can add as many rules as you like.  // - A rule will not be added if it
-lacks the required properties, ie, either a //   predicate, a test, or both.
+// Instantiate a context. You can do this multiple times to create different
+// contexts for different uses.
+const A = new Authoritah()
+
+// Create a Rule for only creatures whose species is "ManBearPig", asserting
+// that all such creatures should be half man, half bear, and half pig.
+//
+// - You can add as many rules as you like.
+// - A rule will not be added if it lacks the required properties, ie, either a
+//   predicate, a test, or both.
 A.addRule({
 
   // This function is used to decide whether or not to test an object against
@@ -121,7 +127,7 @@ A.respect(notManBearPig) // => true, because the rule is only for ManBearPigs
 // rules that were violated. Sorry about the naming, but the south park
 // references are more important than code comprehension.
 A.disrespectedRules(manBearPig) // => []
-A.disrespectedRules(fakeManBearPig) // => [ { predicate: [Function: predicate], test: [Function: test] } ]
+A.disrespectedRules(fakeManBearPig) // => [{ ... }]
 
 A
   .disrespectedRules(fakeManBearPig)[0]
@@ -132,8 +138,8 @@ A.disrespectedRules(notManBearPig) // => []
 // Get the number of registered rules.
 A.ruleCount() // => 1
 
-// Clear all rules
-A.clearRules() // => [ { predicate: [Function: predicate], test: [Function: test] } ]
+// Clear all rules, and return the cleared ones
+A.clearRules() // => [{ ... }, ...]
 A.ruleCount() // => 0
 ```
 

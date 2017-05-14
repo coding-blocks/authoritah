@@ -1,12 +1,13 @@
 const M = require('mocha'),
   C = require('chai'),
   R = require('ramda'),
-  A = require('../index')
+  Authoritah = require('../index')
 ;
 
 const should = C.should(),
   TIMEOUT = 1000,
   noop = R.always(undefined),
+  A = new Authoritah(),
 
   ruleWithFalsePredicate = () => ({
     predicate: R.F,
@@ -93,7 +94,7 @@ describe ('it respects your authoritah', () => {
       A.clearRules()
       A.addRule(ruleWithFalsePredicate())
       R.map(
-        A.addRule,
+        A.addRule.bind(A),
         R.times(truthyRule, 5)
       )
     })
@@ -134,7 +135,7 @@ describe ('it respects your authoritah', () => {
   describe ('error handling', () => {
     beforeEach(() => {
       R.map(
-        A.addRule,
+        A.addRule.bind(A),
         R.times(truthyRule, 5)
       )
     })
