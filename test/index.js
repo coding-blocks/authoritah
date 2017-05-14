@@ -67,6 +67,26 @@ describe ('it respects your authoritah', () => {
     done()
   }).timeout(TIMEOUT)
 
+  describe('clearing rules', (done) => {
+    it('should clear rules', (done) => {
+      let rule = truthyRule()
+      rule.watwat = 'wat'
+
+      A.addRule(rule)
+
+      A.ruleCount().should.equal(1)
+
+      let clearedRules = A.clearRules()
+
+      A.ruleCount().should.equal(0)
+
+      R.length(clearedRules).should.equal(1)
+      R.contains(rule, clearedRules).should.equal(true)
+
+      done()
+    }).timeout(TIMEOUT)
+  })
+
   describe ('when a non-zero number of predicates match', () => {
 
     beforeEach(() => {
@@ -104,11 +124,11 @@ describe ('it respects your authoritah', () => {
       let disrespectedRules = A.disrespectedRules({ })
 
       R.length(disrespectedRules).should.equal(2)
-      R.contains(rule1, disrespectedRules)
-      R.contains(rule2, disrespectedRules)
+      R.contains(rule1, disrespectedRules).should.equal(true)
+      R.contains(rule2, disrespectedRules).should.equal(true)
 
       done()
-    })
+    }).timeout(TIMEOUT)
   })
 
   describe ('error handling', () => {

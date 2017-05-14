@@ -36,7 +36,11 @@ const respect = (request) => {
   )
 }
 
-const clearRules = () => rules = [ ]
+const clearRules = () => {
+  let clearedRules = rules
+  rules = [ ]
+  return clearedRules
+}
 
 const ruleCount = () => {
   return R.length(rules)

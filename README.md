@@ -133,7 +133,7 @@ A.disrespectedRules(notManBearPig) // => []
 A.ruleCount() // => 1
 
 // Clear all rules
-A.clearRules()
+A.clearRules() // => [ { predicate: [Function: predicate], test: [Function: test] } ]
 A.ruleCount() // => 0
 ```
 
