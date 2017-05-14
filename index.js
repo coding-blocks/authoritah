@@ -14,21 +14,26 @@ const addRule = (rule) => {
   return isRuleValid
 }
 
-const respect = (request) => {
+const disrespectedRules = (request) => {
   if (R.isNil(request)) return false;
 
   const matchingRules = R.filter(
     (rule) => U.falseIfError(rule.predicate, request)
   )
 
-  const tests = R.map(
-    (test) => U.falseIfError(test),
-    R.pluck('test', matchingRules(rules))
+  const disrespectedRules = R.filter(
+    (rule) => (! U.falseIfError(rule.test, request)),
+    matchingRules(rules)
   )
 
-  const allTestsPass = R.allPass(tests)
+  return disrespectedRules
+}
 
-  return allTestsPass(request)
+const respect = (request) => {
+  return R.equals(
+    0,
+    R.length(disrespectedRules(request))
+  )
 }
 
 const clearRules = () => rules = [ ]
@@ -39,5 +44,6 @@ const ruleCount = () => {
 
 module.exports.clearRules = clearRules
 module.exports.addRule = addRule
+module.exports.disrespectedRules = disrespectedRules
 module.exports.respect = respect
 module.exports.ruleCount = ruleCount

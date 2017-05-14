@@ -91,6 +91,24 @@ describe ('it respects your authoritah', () => {
       done()
     }).timeout(TIMEOUT)
 
+    it('should return all violated rules', (done) => {
+      let rule1 = falsyRule(),
+        rule2 = falsyRule()
+
+      rule1.errorCode = 1
+      rule2.errorCode = 2
+
+      A.addRule(rule1)
+      A.addRule(rule2)
+
+      let disrespectedRules = A.disrespectedRules({ })
+
+      R.length(disrespectedRules).should.equal(2)
+      R.contains(rule1, disrespectedRules)
+      R.contains(rule2, disrespectedRules)
+
+      done()
+    })
   })
 
   describe ('error handling', () => {
