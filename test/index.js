@@ -22,6 +22,20 @@ const should = C.should(),
   falsyRule = () => ({
     predicate: R.T,
     test: R.F
+  }),
+
+  truthyRuleAsync = () => ({
+    predicate: R.T,
+    test: (request) => new Promise((resolve, reject) => {
+      resolve()
+    })
+  }),
+
+  falsyRuleAsync = () => ({
+    predicate: R.T,
+    test: (request) => new Promise((resolve, reject) => {
+      reject()
+    })
   })
 ;
 
@@ -130,6 +144,25 @@ describe ('it respects your authoritah', () => {
 
       done()
     }).timeout(TIMEOUT)
+  })
+
+  describe('async tests', () => {
+    beforeEach(() => {
+      A.clearRules()
+      A.addRule(truthyRuleAsync())
+    })
+
+    it('should resolve if all tests resolve', (done) => {
+      A.respectAsync({ })
+        .then(result => done())
+    })
+
+    it('should be rejected if any one test rejects', (done) => {
+      A.addRule(falsyRuleAsync())
+
+      A.respectAsync({ })
+        .catch(error => done())
+    })
   })
 
   describe ('error handling', () => {

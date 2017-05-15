@@ -20,10 +20,11 @@ Authoritah implements a rule based system, where a rule looks like this:
 }
 ```
 
-Here, both `predicate()` and `test()` are **synchronous** functions returning
-booleans. For each rule where the predicate returns `true` for the object under
-scrutiny(supplied via `respect()`, see below), Authoritah ensures that the
-corresponding `test()` returns a truthy value as well.
+Here, both `predicate()` and `test()` are functions returning booleans. For each
+rule where the predicate returns `true` for the object under scrutiny(supplied
+via `respect()`, see below), Authoritah ensures that the corresponding `test()`
+returns a truthy value as well. Note that `predicate()` must always be
+synchronous.
 
 A sample rule used internally at Coding Blocks looks like this:
 
@@ -53,7 +54,14 @@ or not.
 Finally, ensure every rule passes against object `x` with:
 
 ```javascript
+// If all your tests are synchronous:
 A.respect(x)
+
+// In case you have one or more async tests:
+A.respectAsync(x)
+  .then(...)
+  .catch(...)
+
 ```
 
 This returns a boolean indicating whether every rule passed or not.

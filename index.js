@@ -17,16 +17,19 @@ class Authoritah {
     return isRuleValid
   }
 
+  matchingRules(request) {
+    return R.filter(
+      (rule) => U.falseIfError(rule.predicate, request),
+      this.rules
+    )
+  }
+
   disrespectedRules(request) {
     if (R.isNil(request)) return false;
 
-    const matchingRules = R.filter(
-      (rule) => U.falseIfError(rule.predicate, request)
-    )
-
     const disrespectedRules = R.filter(
       (rule) => (! U.falseIfError(rule.test, request)),
-      matchingRules(this.rules)
+      this.matchingRules(request)
     )
 
     return disrespectedRules
@@ -36,6 +39,13 @@ class Authoritah {
     return R.equals(
       0,
       R.length(this.disrespectedRules(request))
+    )
+  }
+
+  respectAsync(request) {
+    let tests = R.pluck('test', this.matchingRules(request))
+    return Promise.all(
+      (R.map(fn => fn(request), tests))
     )
   }
 
