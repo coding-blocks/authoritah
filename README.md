@@ -1,9 +1,9 @@
 # README
 
-Authoritah is an unopinionated, tiny authorization library for node
-applications. This is used internally at Coding Blocks for the authorization
-subsystems of various applications, but is unopinionated enough to be useful in
-any scenario where you need to enforce a set of rules on an object.
+Authoritah is an unopinionated, tiny, library for node that provides a
+convenient API for scrutinizing an object against a set of rules. This is used
+internally at Coding Blocks for the authorization subsystems of various
+applications, but is unopinionated enough to be useful in any scenario.
 
 ## Author
 
@@ -36,10 +36,15 @@ const onlyAdminsCanDeleteRecords = {
 })
 ```
 
+First, create a context:
+```javascript
+const A = new Authoritah()
+```
+
 To add the rule:
 
 ```javascript
-Authoritah.addRule(onlyAdminsCanDeleteRecords)
+A.addRule(onlyAdminsCanDeleteRecords)
 ```
 
 `addRule()` also returns a boolean value indicating whether your rule was added
@@ -48,15 +53,15 @@ or not.
 Finally, ensure every rule passes against object `x` with:
 
 ```javascript
-Authoritah.respect(x)
+A.respect(x)
 ```
 
 This returns a boolean indicating whether every rule passed or not.
 
-To check the number of rules that have been added, use `Authoritah.ruleCount()`.
+To check the number of rules that have been added, use `A.ruleCount()`.
 
 To clear all existing rules (useful for switching contexts), use
-`Authoritah.clearRules()`.
+`A.clearRules()`.
 
 ## Example
 
