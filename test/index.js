@@ -27,14 +27,14 @@ const should = C.should(),
   truthyRuleAsync = () => ({
     predicate: R.T,
     test: (request) => new Promise((resolve, reject) => {
-      resolve()
+      resolve(true)
     })
   }),
 
   falsyRuleAsync = () => ({
     predicate: R.T,
     test: (request) => new Promise((resolve, reject) => {
-      reject()
+      reject(false)
     })
   })
 ;
@@ -152,16 +152,40 @@ describe ('it respects your authoritah', () => {
       A.addRule(truthyRuleAsync())
     })
 
-    it('should resolve if all tests resolve', (done) => {
+    it('should resolve only if all tests resolve, and no synchronous test returns false', (done) => {
+      A.addRule(truthyRule())
       A.respectAsync({ })
-        .then(result => done())
+        .then(result => {
+          result.should.equal(true)
+        })
+        .then((_) => {
+          done()
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    })
+
+    it('should reject if all tests resolve, but one synchronous test returns false', (done) => {
+      A.addRule(falsyRule())
+
+      A.respectAsync({ })
+        .then(result => {
+          result.should.equal(false)
+
+          done()
+        })
     })
 
     it('should be rejected if any one test rejects', (done) => {
       A.addRule(falsyRuleAsync())
 
       A.respectAsync({ })
-        .catch(error => done())
+        .then(result => {
+          result.should.equal(false)
+
+          done()
+        })
     })
   })
 

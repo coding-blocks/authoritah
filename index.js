@@ -47,6 +47,15 @@ class Authoritah {
     return Promise.all(
       (R.map(fn => fn(request), tests))
     )
+      .then((results) => {
+        return R.all(
+          R.identity,
+          results
+        )
+      })
+      .catch((error) => {
+        return false
+      })
   }
 
   clearRules() {
